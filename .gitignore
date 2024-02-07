@@ -35,3 +35,12 @@ out/
 
 ### VS Code ###
 .vscode/
+
+
+
+## 추가 ignore
+
+settings.gradle
+gradlew.bat
+gradlew
+build.gradle
