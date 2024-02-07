@@ -41,7 +41,7 @@
 
 
 
- 1. 메인페이지 지도 SVG 활용 및 클릭이벤트
+ # 1. 지도 SVG 활용 및 클릭이벤트
 -- SVG 이미지를 컴포넌트로 만들어서 클릭 이벤트를 넣고 CSS 효과까지 넣는 부분이 새롭고 신기하였습니다.
       초기에 지도를 어떻게 넣을 것이며 사용자에게 보여줄지 고민하다가 이와 같이 구현하였습니다.
 
@@ -59,7 +59,7 @@
 
 
 
-2. 채팅
+# 2. 채팅
    ![image](https://github.com/whyj2m/Final-Portfolio/assets/149341808/1c1f0fd3-0ee3-4896-bf8e-d7a59bd7e4fc)
    ![image](https://github.com/whyj2m/Final-Portfolio/assets/149341808/ac84d03d-f91f-4ba6-bdcf-fe352f4c3501)
 
