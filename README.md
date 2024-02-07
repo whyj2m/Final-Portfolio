@@ -3,7 +3,7 @@
    - 새하마노 방방곡곡 (대한민국 소개 사이트)
 
 # 2. 개발기간
-  - 2023.12.05 ~ 2024.01.16 // + 2024.01.23 ~ 31 (추가개발)
+  - 2023.12.05 ~ 2024.01.16 ::  + 2024.01.23 ~ 31 (추가개발)
 ## 2-1 팀원
  - 윤주민,백승현,백혜윤
 
@@ -35,65 +35,37 @@
 ##  *프로젝트에서 나의 역할
  - 팀장으로서 팀원분들과 화합하고 의사소통하며 제가 맡은 메인 페이지 및 각종 소개 페이지 채팅 및 검색을 구현하였습니다.
 
- - ### 메인페이지 (랜덤호텔목록) 
-![image](https://github.com/whyj2m/Semi-Portfolio/assets/149341808/9fb53fbd-2a36-404b-92f7-28e764561f9a)
+ - ### 메인페이지
+![image](https://github.com/whyj2m/Final-Portfolio/assets/149341808/24be80a3-3156-4047-a4e7-c7883ac93b83)
+![image](https://github.com/whyj2m/Final-Portfolio/assets/149341808/0d68b73b-c739-46d6-bc17-d0e7c5f0a7f9)
 
- 1. 쿼리를 쓰면서 어려움
-   - 랜덤으로 8개의 지역상관X 호텔을 불러오는 쿼리를 짜려고 기획했었다. 그런데 XML에서 프론트로 처리하려고 했으나 어려움이 있었고 선생님께 질문을 했었는데 SQL쿼리문으로 해결이 가능하다고 하셔서
-      도움을 받아 쿼리를 작성하였습니다.
 
-     ```java
-      <select id="list" resultType="map">
-		select anos ano, hno, hotelname, cdesc, price 
-        from (
-            select min(ano) as anos, hno, hotelname, cdesc, null price
-            from hotel
-            join area using(ano)
-            where ano is not null group by ano order by 1
-        ) a
-        union
-        select * 
-        from (
-        select ano, hno, hotelname, cdesc, roomprice
-            from room 
-            join hotel 
-            using(hno) 
-            join area 
-            using(ano) 
-            order by rand() 
-            limit 8
-        ) a
-	</select>
--쿼리를 작성하면서 연산자 union, join, limit를 사용하여 서브 쿼리끼리 연결하고 하나의 쿼리로 만들어서 Mapper로 사용했던 부분이 너무 신기하고 쿼리로 이렇게 데이터 처리를 할 수 있구나! 신기했던 부분이었습니다.
 
-   - ### 호텔목록 페이지
-     ![image](https://github.com/whyj2m/Semi-Portfolio/assets/149341808/e0a02916-80f9-4d63-a76e-2f2a8af3be7f)
+ 1. 메인페이지 지도 SVG 활용 및 클릭이벤트
+ ![image](https://github.com/whyj2m/Final-Portfolio/assets/149341808/d242cf9c-3deb-443b-88e7-cb3112146a51)
 
-     ### 호텔 상세페이지
-     ![image](https://github.com/whyj2m/Semi-Portfolio/assets/149341808/ee78d0cd-ffc3-4200-a843-a0a27aa2479c)
+-- SVG 이미지를 컴포넌트로 만들어서 클릭 이벤트를 넣고 CSS 효과까지 넣는 부분이 새롭고 신기하였습니다. 초기에 지도를 어떻게 넣을 것이며 사용자에게 보여줄지 고민하다가 이와 같이 구현하였습니다.
 
-     ![image](https://github.com/whyj2m/Semi-Portfolio/assets/149341808/93e9fc85-5f2c-411c-aecc-881157bebe93)
+   - ### 지역 페이지
+     ![image](https://github.com/whyj2m/Final-Portfolio/assets/149341808/cc9417e2-2b3c-4c57-820e-dddcb42ca9ef)
+     
+     ### 관광지 페이지 
+     ![image](https://github.com/whyj2m/Final-Portfolio/assets/149341808/258cc78e-0d82-47ac-94ab-456d12f6dd0f)
 
-     ### 댓글
-     ![image](https://github.com/whyj2m/Semi-Portfolio/assets/149341808/06d43810-6d5a-4e44-a7aa-6e14492002ac)
+     ### 축제 페이지
+     ![image](https://github.com/whyj2m/Final-Portfolio/assets/149341808/d3727eda-02d7-450a-a966-7d9cfa042ac1)
 
--- 호텔목록 및 상세페이지는 특별한 쿼리없이 select 와 from 을 사용하여 테이블 데이터를 불러왔었습니다. 조금 신기했던 부분은 필요한 데이터만 뽑아오려고한쿼리가
-```java
-<select id="getList" resultType="com.imfreepass.prj.domain.HotelVO">
-		select * from (
-		    select 
-		        (select count(*) from reply where hno = h.hno) replyCnt,
-		        (select coalesce(round(AVG(replypoint)), 0) from reply where hno = h.hno) avg,					<!-- coalesce는 avg - null일떄 0으로 변환  -->
-		        (select min(roomprice) from room where hno = h.hno) price,
-		        h. *
-		    from hotel h
-		    where ano = #{ano}
-		) a
-		where price is not null
-	</select>
-```
-- 여기서 호텔 목록에서 호텔 상세페이지 및 댓글 데이터를 불러와서 목록에서 보여줘야 했는데 replyCnt, avg, price 같은 하위 컬럼 데이터들을 저렇게 엮어서 HotelVO에 매핑해서 DB 테이블에 없는 데이터도 저렇게 보여줄 수 있단 게 정말 신기했습니다. 구조를 완벽하지는 않지만
-이렇게 하나 둘 알아간다는 게 정말 좋았습니다.
+     ### 검색 페이지
+     ![image](https://github.com/whyj2m/Final-Portfolio/assets/149341808/06a8327f-9650-4cbc-8464-147e5937ea84)
+
+
+
+2. 채팅
+   ![image](https://github.com/whyj2m/Final-Portfolio/assets/149341808/b98605e1-9bfb-424e-935c-2406350f2c36)
+   ![image](https://github.com/whyj2m/Final-Portfolio/assets/149341808/1c1f0fd3-0ee3-4896-bf8e-d7a59bd7e4fc)
+   ![image](https://github.com/whyj2m/Final-Portfolio/assets/149341808/ac84d03d-f91f-4ba6-bdcf-fe352f4c3501)
+
+-- WebSocket을 사용하여 DB 연동 없이 세션에서 관리되는 채팅 컴포넌트를 구현하였습니다. 초기에 채팅을 어떻게 구현해야 하나 막막했는데 참고할 자료들이 생각보다 많았고 WebSocket과 세션 그리고 실시간으로 채팅이 진행되는 부분을 이해하는 게 재밌었습니다.
 
 
 # 세미 프로젝트 총평
